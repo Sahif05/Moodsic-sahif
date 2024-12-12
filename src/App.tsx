@@ -4,6 +4,7 @@ import Home from './pages/Home';
 import About from './pages/About';
 import Work from './pages/Work';
 import Projects from './pages/Projects';
+import { SpeedInsights } from "@vercel/speed-insights/react"
 
 const App: React.FC = () => {
   return (
