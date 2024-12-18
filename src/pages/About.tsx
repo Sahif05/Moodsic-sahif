@@ -135,8 +135,7 @@ const About: React.FC = () => {
             and Python from Microsoft and hold a CompTIA IT Certification.
           </p>
           <p className="text-lg md:text-xl animate-fadeIn">
-            Other than this academic engagement, I am also serving as Workshop
-            Director and Competition Coordinator at Black and Gold Analytics, where
+            Other than this academic engagement, I am also serving as a Vice President, where
             I have organized more than 5 workshops in data analytics and web
             development, directly training over 100 participants in hands-on
             projects. I have also coordinated 3+ competitions with 50+ participants
