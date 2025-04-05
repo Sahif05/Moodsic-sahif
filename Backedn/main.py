@@ -22,7 +22,7 @@ def login():
         f"redirect_uri={redirect_uri}&scope={scope}"
     )
 
-    return RedirectResponse(auth_url)
+    return RedirectResponse(url=auth_url)
 
 def get_user_profile(access_token: str):
     url = "https://api.spotify.com/v1/me"
