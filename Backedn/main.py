@@ -21,7 +21,6 @@ def login():
         f"response_type=code&client_id={client_id}&"
         f"redirect_uri={redirect_uri}&scope={scope}"
     )
-
     return RedirectResponse(url=auth_url)
 
 def get_user_profile(access_token: str):
