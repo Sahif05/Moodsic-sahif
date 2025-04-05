@@ -1,20 +1,15 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Home from './pages/Home';
-import About from './pages/About';
-import Work from './pages/Work';
-import Projects from './pages/Projects';
-import { SpeedInsights } from "@vercel/speed-insights/react"
+import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import WelcomePage from "./pages/WelcomePage";
+import NextPage from "./pages/NextPage";
 
 const App: React.FC = () => {
   return (
     <Router>
-      <div className="bg-black text-yellow-400">
+      <div className="min-h-screen bg-gradient-to-r from-indigo-500 to-purple-600 text-white">
         <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/work" element={<Work />} />
-          <Route path="/projects" element={<Projects />} />
+          <Route path="/" element={<WelcomePage />} />
+          <Route path="/next" element={<NextPage />} />
         </Routes>
       </div>
     </Router>
