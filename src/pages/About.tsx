@@ -107,7 +107,7 @@ const About: React.FC = () => {
         </div>
       </div>
 
-      {/* Header Section */}
+      {/* Header*/}
       <section
         id="about"
         className={`mt-12 max-w-4xl w-full mx-auto transition-opacity ${
