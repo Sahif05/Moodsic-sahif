@@ -1,4 +1,5 @@
 from fastapi import FastAPI, Request, HTTPException
+from fastapi.responses import RedirectResponse
 from dotenv import load_dotenv
 import webbrowser
 import requests
@@ -14,12 +15,14 @@ redirect_uri = os.getenv("SPOTIFY_REDIRECT_URI")
 
 @app.get("/login")
 def login():
-    scope = "user-library-read playlist-read-private"  
+    scope = "user-library-read playlist-read-private"
+    auth_url = (
+        f"https://accounts.spotify.com/authorize?"
+        f"response_type=code&client_id={client_id}&"
+        f"redirect_uri={redirect_uri}&scope={scope}"
+    )
 
-    auth_url = f"https://accounts.spotify.com/authorize?response_type=code&client_id={client_id}&redirect_uri={redirect_uri}&scope={scope}"
-
-    webbrowser.open(auth_url)
-    return {"message": "Redirecting to Spotify for authorization"}
+    return RedirectResponse(auth_url)
 
 def get_user_profile(access_token: str):
     url = "https://api.spotify.com/v1/me"
