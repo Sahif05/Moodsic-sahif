@@ -9,8 +9,8 @@ const App: React.FC = () => {
     <Router>
       <div className="min-h-screen bg-gradient-to-r from-indigo-500 to-purple-600 text-white">
         <Routes>
-          <Route path="/next" element={<NextPage />} />
-          <Route path="/" element={<Login />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/" element={<NextPage />} />
         </Routes>
       </div>
     </Router>
