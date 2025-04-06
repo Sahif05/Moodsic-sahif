@@ -1,7 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
-const WelcomePage: React.FC = () => {
+const Login: React.FC = () => {
   const navigate = useNavigate();
 
   const handleClick = () => {
@@ -26,4 +26,4 @@ const WelcomePage: React.FC = () => {
   );
 };
 
-export default WelcomePage;
+export default Login;
