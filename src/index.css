@@ -1,4 +1,10 @@
+@import url('https://fonts.googleapis.com/css2?family=Kumbh+Sans:wght@400;500;600;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+.clip-top-half {
+    clip-path: inset(0 0 50% 0); /* top half is visible, bottom is clipped */
+  }
+  

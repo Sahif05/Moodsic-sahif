@@ -1,29 +1,48 @@
-import React from "react";
+import React from 'react';
+import { Link } from 'react-router-dom';
 
-const WelcomePage: React.FC = () => {
-  const handleClick = () => {
-    window.location.href = "http://127.0.0.1:8000/login";
-    // Replace localhost:8000 with your actual FastAPI server address if different
-  };
-
+const WelcomePage = () => {
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen px-6 py-12 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-600">
-      <h1 className="text-5xl font-extrabold text-white mb-6 tracking-wide text-center">
-        Welcome to Moodsic
-      </h1>
-      <p className="text-xl text-white mb-8 max-w-lg text-center leading-relaxed opacity-90">
-        Moodsic is an intuitive platform that tailors music to your mood. By
-        analyzing your emotional state, we create personalized playlists to match
-        your vibes, whether you're feeling upbeat or introspective. Let us be the
-        soundtrack to your day.
-      </p>
-      <button
-        onClick={handleClick}
-        className="px-10 py-5 bg-green-600 text-white font-medium rounded-full shadow-xl hover:bg-green-500 transition duration-300 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-green-300"
-        aria-label="Proceed to the next page"
+    <div className="h-screen w-screen bg-moodsic-bg flex flex-col items-center justify-center">
+      <div className="text-center">
+        <h2 className="font-kumbh text-[64px] font-normal mb-4">welcome to</h2>
+        <div className="relative">
+          <h1 className="font-kumbh text-[150px] font-normal leading-none">
+            m
+            <span className="relative">
+              o
+              <div className="absolute w-[80px] h-[40px] bg-black rounded-b-[40px] top-[15px] left-1/2 -translate-x-1/2"></div>
+            </span>
+            <span className="relative">
+              o
+              <div className="absolute w-[80px] h-[40px] bg-black rounded-b-[40px] top-[15px] left-1/2 -translate-x-1/2"></div>
+            </span>
+            dsic
+          </h1>
+          <svg
+            className="absolute left-1/2 -translate-x-1/2 -bottom-4"
+            width="200"
+            height="40"
+            viewBox="0 0 200 40"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M40 20C40 20 80 40 100 40C120 40 160 20 160 20"
+              stroke="black"
+              strokeWidth="4"
+              strokeLinecap="round"
+            />
+          </svg>
+        </div>
+      </div>
+      
+      <Link 
+        to="/login" 
+        className="mt-16 bg-moodsic-blue text-white font-kumbh text-[48px] px-12 py-4 rounded-full hover:bg-opacity-90 transition-all"
       >
-        Get Started
-      </button>
+        get started
+      </Link>
     </div>
   );
 };

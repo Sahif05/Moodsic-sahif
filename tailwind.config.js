@@ -5,6 +5,13 @@ module.exports = {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        'kumbh': ['Kumbh Sans', 'sans-serif'],
+      },
+      colors: {
+        'moodsic-blue': '#0040DD',
+        'moodsic-bg': '#EEE5F1',
+      },
       animation: {
         fadeIn: 'fadeIn 1.5s ease-in-out',
       },
