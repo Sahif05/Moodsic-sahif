@@ -29,6 +29,16 @@ client_id = 'a7c99eebbf6843d383adf6ffa6b93854'
 client_secret = 'a3bc41920291443787dc5f5a7cf5638d'
 redirect_uri = 'http://127.0.0.1:8000/callback'
 
+emotion_to_query = {
+    'Happy': 'genre:pop',        # Pop music for happy emotions
+    'Sad': 'genre:ballad',       # Ballads for sad emotions
+    'Angry': 'genre:rock',       # Rock for angry emotions
+    'Fear': 'genre:ambient',     # Ambient or eerie music for fear
+    'Surprise': 'genre:electronic',  # Electronic or upbeat music for surprise
+    'Neutral': 'genre:instrumental',  # Instrumental for neutral mood
+    'Disgust': 'genre:industrial',
+}
+
 @app.get("/login")
 def login():
     scope = "user-library-read playlist-read-private"
@@ -121,9 +131,10 @@ async def detect_emotion(request: Request):
     try:
         data = await request.json()
         image_data = data.get('image')
-        
+        access_token = data.get('access_token')  # Ensure you pass the access token with the request
+
         if not image_data:
-            raise HTTPException(status_code=400, detail="err")
+            raise HTTPException(status_code=400, detail="No image data")
         
         # Remove the data URL prefix if present
         if image_data.startswith('data:image/jpeg;base64,'):
@@ -134,10 +145,69 @@ async def detect_emotion(request: Request):
         nparr = np.frombuffer(image_bytes, np.uint8)
         frame = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
         
-        # Detect emotions
+        # Detect emotion
         results = emotion_detector.detect_emotion(frame)
-        
-        return {"results": results}
+        detected_emotion = results[0]['emotion'] if results else None
+
+        if detected_emotion:
+            # Get the search query based on the detected emotion
+            query = emotion_to_query.get(detected_emotion)
+
+            if not query:
+                raise HTTPException(status_code=404, detail="No music found for the detected emotion")
+
+            # Search for a song on Spotify using the query
+            song = await search_song(access_token, query)
+            
+            if song:
+                song_uri = song['uri']
+                # Play the selected song
+                music_response = play_music(access_token, song_uri)
+                return {"emotion": detected_emotion, "music": music_response}
+            else:
+                raise HTTPException(status_code=404, detail="No song found for the emotion")
+        else:
+            raise HTTPException(status_code=400, detail="No emotion detected")
     
     except Exception as e:
-        raise HTTPException(status_code=500, detail="err")
+        raise HTTPException(status_code=500, detail="Error in emotion detection or music playback")
+    
+async def search_song(access_token: str, query: str):
+    url = f"https://api.spotify.com/v1/search"
+    headers = {
+        "Authorization": f"Bearer {access_token}",
+        "Content-Type": "application/json"
+    }
+    params = {
+        'q': query,
+        'type': 'track',  # You are searching for tracks (songs)
+        'limit': 1  # Fetch the top result
+    }
+    response = requests.get(url, headers=headers, params=params)
+    
+    if response.status_code == 200:
+        data = response.json()
+        if data['tracks']['items']:
+            # Return the first song's URI
+            song = data['tracks']['items'][0]
+            return {'uri': song['uri'], 'name': song['name'], 'artist': song['artists'][0]['name']}
+        else:
+            return None
+    else:
+        raise HTTPException(status_code=response.status_code, detail="Error fetching song")
+    
+def play_music(access_token: str, song_uri: str):
+    url = "https://api.spotify.com/v1/me/player/play"
+    headers = {
+        "Authorization": f"Bearer {access_token}",
+        "Content-Type": "application/json"
+    }
+    data = {
+        "uris": [song_uri]  # Play the song using its URI
+    }
+    response = requests.put(url, headers=headers, json=data)
+    
+    if response.status_code == 200:
+        return {"status": "success", "message": f"Playing {song_uri}"}
+    else:
+        return {"status": "error", "message": "Failed to start music playback", "details": response.json()}
