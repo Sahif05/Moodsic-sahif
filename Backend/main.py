@@ -110,17 +110,31 @@ def detect_emotion():
         detected_emotion, confidence = detect_emotion_from_image(frame)
         
         if detected_emotion:
+            # Use the emotion_to_query mapping to find a music genre
             query = emotion_to_query.get(detected_emotion)
             if not query:
                 return jsonify({"error": "No music found for this emotion"}), 404
 
-            song = search_song(access_token, query)
+            # Get user playlists and search for tracks
+            playlists = get_user_playlists(access_token)
+            song = None
+
+            # Iterate through the playlists and check for a matching song
+            for playlist in playlists:
+                for track in playlist['tracks']:
+                    # Look for a song that matches the emotion-based query (genre or mood)
+                    if query.lower() in track['name'].lower() or query.lower() in track['artist'].lower():
+                        song = track
+                        break
+                if song:
+                    break
+
             if song:
                 song_uri = song['uri']
                 music_response = play_music(access_token, song_uri)
                 return jsonify({"emotion": detected_emotion, "music": music_response})
             else:
-                return jsonify({"error": "No song found for the emotion"}), 404
+                return jsonify({"error": "No song found in your playlists matching the emotion"}), 404
         else:
             return jsonify({"error": "No emotion detected"}), 400
     
