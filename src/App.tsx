@@ -2,6 +2,7 @@ import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import WelcomePage from "./pages/WelcomePage";
 import WindowScr from "./pages/WindowScr";
+import EmotialAnalyzer from "./pages/EmotionalAnalyzer";
 
 const App: React.FC = () => {
   return (
@@ -10,6 +11,7 @@ const App: React.FC = () => {
         <Routes>
           <Route path = "/" element={<WelcomePage />} />
           <Route path="/windowscr" element={<WindowScr />} />
+          <Route path="/emotionalanalyzer" element={<EmotialAnalyzer />} />
         </Routes>
       </div>
     </Router>
