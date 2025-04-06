@@ -1,16 +1,33 @@
 from fastapi import FastAPI, Request, HTTPException
 from fastapi.responses import RedirectResponse
+from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
 import webbrowser
 import requests
 import os
+import base64
+import numpy as np
+import cv2
+from cnn_utils import EmotionDetector
 
 app = FastAPI()
 load_dotenv()
 
-client_id = os.getenv("SPOTIFY_CLIENT_ID")
-client_secret = os.getenv("SPOTIFY_CLIENT_SECRET")
-redirect_uri = os.getenv("SPOTIFY_REDIRECT_URI")
+# Add CORS middleware
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:3000"],  # Your React app's URL
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+# Initialize emotion detector
+emotion_detector = EmotionDetector()
+
+client_id = 'a7c99eebbf6843d383adf6ffa6b93854'
+client_secret = 'a3bc41920291443787dc5f5a7cf5638d'
+redirect_uri = 'http://127.0.0.1:8000/callback'
 
 @app.get("/login")
 def login():
@@ -28,18 +45,15 @@ async def callback(request: Request):
     code = request.query_params.get("code")
 
     if not code:
-        raise HTTPException(status_code=400, detail="No authorization code found")
+        raise HTTPException(status_code=400, detail="err")
 
     token = await get_access_token(code)
     profile = get_user_profile(token)
     playlists = get_user_playlists(token)
     
-    return {
-        "message": "User profile and playlists fetched",
-        "access_token": token,
-        "profile": profile,
-        "playlists": playlists
-    }
+    # Create a URL with the data as query parameters
+    frontend_url = f"http://localhost:3000/profile?profile={profile}&playlists={playlists}"
+    return RedirectResponse(url=frontend_url)
 
 async def get_access_token(code: str):
     token_url = "https://accounts.spotify.com/api/token"
@@ -58,7 +72,7 @@ async def get_access_token(code: str):
         token_info = response.json()
         return token_info['access_token']
     else:
-        raise HTTPException(status_code=response.status_code, detail=f"Failed to get access token: {response.text}")
+        raise HTTPException(status_code=response.status_code, detail="err")
 
 def get_user_profile(access_token: str):
     url = "https://api.spotify.com/v1/me"
@@ -69,7 +83,7 @@ def get_user_profile(access_token: str):
     if response.status_code == 200:
         return response.json()
     else:
-        raise HTTPException(status_code=response.status_code, detail=f"Failed to fetch user profile: {response.text}")
+        raise HTTPException(status_code=response.status_code, detail="err")
 
 def get_user_playlists(access_token: str):
     url = "https://api.spotify.com/v1/me/playlists"
@@ -81,7 +95,7 @@ def get_user_playlists(access_token: str):
         return response.json()
     else:
         return {
-            "error": "Failed to fetch playlists",
+            "error": "err",
             "details": response.json()
         }
 
@@ -100,4 +114,30 @@ def refresh_access_token(refresh_token: str):
     if response.status_code == 200:
         return response.json()['access_token']
     else:
-        raise HTTPException(status_code=response.status_code, detail=f"Failed to refresh access token: {response.text}")
+        raise HTTPException(status_code=response.status_code, detail="err")
+
+@app.post("/detect-emotion")
+async def detect_emotion(request: Request):
+    try:
+        data = await request.json()
+        image_data = data.get('image')
+        
+        if not image_data:
+            raise HTTPException(status_code=400, detail="err")
+        
+        # Remove the data URL prefix if present
+        if image_data.startswith('data:image/jpeg;base64,'):
+            image_data = image_data.split(',')[1]
+        
+        # Decode base64 image
+        image_bytes = base64.b64decode(image_data)
+        nparr = np.frombuffer(image_bytes, np.uint8)
+        frame = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
+        
+        # Detect emotions
+        results = emotion_detector.detect_emotion(frame)
+        
+        return {"results": results}
+    
+    except Exception as e:
+        raise HTTPException(status_code=500, detail="err")
