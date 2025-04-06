@@ -1,26 +1,42 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 
 const WelcomeNew = () => {
+  const handleLoginClick = () => {
+    window.open('http://localhost:8000/login', '_blank'); // new tab
+    window.location.href = 'http://localhost:3000/WindowScr'; // current tab
+  };
+
   return (
-    <div className="h-screen w-screen bg-moodsic-bg flex flex-col items-center justify-center">
+    <div className="h-screen w-screen bg-moodsic-bg flex flex-col items-center justify-center pt-[0px]">
       <div className="text-center">
-        <h2 className="font-kumbh text-[32px] font-normal -mb-4 [text-shadow:_2px_2px_2px_rgb(0_0_0_/_20%)]">welcome to</h2>
+        <h2 className="font-kumbh text-[32px] font-normal -mb-4 [text-shadow:_2px_2px_2px_rgb(0_0_0_/_20%)]">
+          welcome to
+        </h2>
         <div className="relative">
           <h1 className="font-kumbh text-[75px] font-normal leading-none [text-shadow:_2px_2px_2px_rgb(0_0_0_/_20%)]">
             m
             <span className="relative">
               o
-              <div className="absolute w-[27px] h-[28px] bg-black rounded-[40px] top-[55px] left-1/2 -translate-x-1/2" style={{ clipPath: 'polygon(0 0, 100% 0, 100% 50%, 0 50%)' }}></div>
+              <div
+                className="absolute w-[27px] h-[28px] bg-black rounded-[40px] top-[55px] left-1/2 -translate-x-1/2"
+                style={{
+                  clipPath: 'polygon(0 0, 100% 0, 100% 50%, 0 50%)',
+                }}
+              ></div>
             </span>
             <span className="relative">
               o
-              <div className="absolute w-[27px] h-[28px] bg-black rounded-[40px] top-[55px] left-1/2 -translate-x-1/2" style={{ clipPath: 'polygon(0 0, 100% 0, 100% 50%, 0 50%)' }}></div>
+              <div
+                className="absolute w-[27px] h-[28px] bg-black rounded-[40px] top-[55px] left-1/2 -translate-x-1/2"
+                style={{
+                  clipPath: 'polygon(0 0, 100% 0, 100% 50%, 0 50%)',
+                }}
+              ></div>
             </span>
             dsic
           </h1>
           <svg
-            className="absolute left-1/2 -translate-x-[60%] -bottom-4"
+            className="absolute left-1/2 -translate-x-[76%] -bottom-4"
             width="120"
             height="40"
             viewBox="0 0 120 40"
@@ -36,13 +52,13 @@ const WelcomeNew = () => {
           </svg>
         </div>
       </div>
-     
-      <a
-        href="http://localhost:8000/login"
+
+      <button
+        onClick={handleLoginClick}
         className="mt-10 bg-moodsic-blue text-white font-kumbh text-[20px] px-[20px] py-[20px] rounded-full hover:bg-opacity-90 transition-all w-[165px] h-[42px] flex items-center justify-center shadow-lg hover:shadow-xl"
       >
         get started
-      </a>
+      </button>
     </div>
   );
 };
