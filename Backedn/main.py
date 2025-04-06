@@ -20,7 +20,7 @@ def login():
         f"?response_type=code&client_id={client_id}"
         f"&redirect_uri={redirect_uri}&scope={scope}"
     )
-    webbrowser.open(auth_url)
+    return RedirectResponse(url=auth_url)
     return {"message": "Redirecting to Spotify for authorization"}
 
 @app.get("/callback")
