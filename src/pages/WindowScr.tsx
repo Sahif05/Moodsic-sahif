@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from "react";
 
-const WindowsScr: React.FC = () => {
+const WindowScr: React.FC = () => {
   const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
@@ -40,4 +40,4 @@ const WindowsScr: React.FC = () => {
   );
 };
 
-export default WindowsScr;
+export default WindowScr;
