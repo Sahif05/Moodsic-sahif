@@ -2,7 +2,7 @@ import React from "react";
 
 const WelcomePage: React.FC = () => {
   const handleClick = () => {
-    window.location.href = "http://localhost:8000/login";
+    window.location.href = "https://moodsic-two.vercel.app/WindowScr";
     // Replace localhost:8000 with your actual FastAPI server address if different
   };
 
