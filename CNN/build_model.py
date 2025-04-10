@@ -1,10 +1,11 @@
 import matplotlib.pyplot as plt
 import os
 
-from tensorflow.python.keras.layers import load_img, img_to_array
-from tensorflow.python.keras.layers import ImageDataGenerator
-from tensorflow.python.keras.layers import Dense,Dropout,Flatten,Conv2D,BatchNormalization,Activation,MaxPooling2D
-from tensorflow.python.keras.layers import Sequential
+
+from keras.preprocessing.image import load_img, img_to_array
+from keras.preprocessing.image import ImageDataGenerator
+from keras.layers import Dense,Dropout,Flatten,Conv2D,BatchNormalization,Activation,MaxPooling2D
+from keras.models import Sequential
 
 
 

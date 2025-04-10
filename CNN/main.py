@@ -5,8 +5,7 @@ This model is trained on the FER2013 dataset.
 '''
 from keras.models import load_model
 from keras.utils import load_img, img_to_array
-
-
+from tensorflow.keras.preprocessing.image import img_to_array
 import cv2
 import numpy as np
 import os
